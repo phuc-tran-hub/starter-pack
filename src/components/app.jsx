@@ -1,41 +1,40 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import debounce from 'lodash.debounce';
+import React from 'react';
+import {
+  BrowserRouter, Routes, Route, useParams,
+} from 'react-router-dom';
+import Nav from './nav';
 
-import youtubeSearch from '../services/youtube-api';
+import '../style.scss';
 
-import SearchBar from './search_bar';
-import VideoDetail from './video_detail';
-import VideoList from './video_list';
+function About(props) {
+  return <div> All there is to know about me </div>;
+}
+function Welcome(props) {
+  return <div>Welcome</div>;
+}
+
+function Test(props) {
+  const { id } = useParams();
+  return <div> ID: {id} </div>;
+}
+
+function FallBack(props) {
+  return <div>URL Not Found</div>;
+}
 
 function App(props) {
-  const [videos, setVideos] = useState([]);
-  const [selectedVideo, setSelected] = useState(null);
-
-  const search = (text) => {
-    youtubeSearch(text).then((result) => {
-      setVideos(result);
-      setSelected(result[0]);
-    });
-  };
-
-  const debouncedSearch = useCallback(debounce(search, 500), []);
-
-  useEffect(() => {
-    search('pixar');
-  }, []);
-
   return (
-    <div>
-      <div id="search-bar">
-        <SearchBar onSearchChange={debouncedSearch} />
+    <BrowserRouter>
+      <div>
+        <Nav />
+        <Routes>
+          <Route path="/" element={<Welcome />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/test/:id" element={<Test />} />
+          <Route path="*" element={<FallBack />} />
+        </Routes>
       </div>
-
-      <div id="video-section">
-        <VideoList onVideoSelect={(selection) => setSelected(selection)} videos={videos} />
-        <VideoDetail video={selectedVideo} />
-      </div>
-
-    </div>
+    </BrowserRouter>
   );
 }
 

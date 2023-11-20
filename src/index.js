@@ -1,10 +1,8 @@
-import $ from 'jquery';
-import './style.scss';
+import React from 'react';
 
-let x = 0;
-function counter() {
-  x += 1;
-  $('#main').html(`You have been here for ${x.toString()} seconds`);
+function About(props) {
+  return <div> All there is to know about me </div>;
 }
-
-setInterval(counter, 1000);
+function Welcome(props) {
+  return <div>Welcome</div>;
+}
